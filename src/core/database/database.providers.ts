@@ -41,7 +41,7 @@ export const databaseProviders = [{
         }
         const sequelize = new Sequelize({
             ...config,
-            logging: false
+            logging: console.log,
         });
         sequelize.addModels([Chef, KorisnickiNalog, ChefLocation, Location, LocationDate, Orders, OrderItem, Product, ProductItem, ProductPurchasing, ProductPurchasingItem, ProductReceiving, ProductReceivingItem, Sales, SalesDateInterval, SalesItem, SifKategorija, SifPriceGroup, SifUloga, SifVendorTerms, Vendor]);
         await sequelize.sync();
