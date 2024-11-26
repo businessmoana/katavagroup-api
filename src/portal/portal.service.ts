@@ -303,7 +303,7 @@ export class PortalService {
         price: item.price
       })
     });
-    // this.sendNotificationEmail();
+    this.sendNotificationEmail();
     return true;
   }
 
