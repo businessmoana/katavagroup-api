@@ -165,16 +165,16 @@ export class PortalService {
         order.push([orderBy, sortedBy.toUpperCase()]);
       }
     }
-    order.push([literal('SalesDateInterval.start_date'), 'DESC'],
-      [literal('Location.location_name'), 'ASC'],
+    order.push([literal('salesDateInterval.start_date'), 'DESC'],
+      [literal('location.location_name'), 'ASC'],
       [literal('chef.first_name'), 'ASC'],)
     const statement = await Sales.findAll({
       attributes: [
         [literal('GROUP_CONCAT(Sales.id)'), 'sales_id'],
         [literal('GROUP_CONCAT(location.location_name ORDER BY location_name)'), 'location_name'],
         [literal("CONCAT(chef.first_name, ' ', chef.last_name)"), 'chef_name'],
-        [literal("DATE_FORMAT(SalesDateInterval.start_date, '%m/%d/%Y')"), 'start_date'],
-        [literal("DATE_FORMAT(SalesDateInterval.end_date, '%m/%d/%Y')"), 'end_date'],
+        [literal("DATE_FORMAT(salesDateInterval.start_date, '%m/%d/%Y')"), 'start_date'],
+        [literal("DATE_FORMAT(salesDateInterval.end_date, '%m/%d/%Y')"), 'end_date'],
       ],
       include: [
         {
@@ -200,7 +200,7 @@ export class PortalService {
         status: 0,
         ...searchOptions.where
       },
-      group: ['sales_date_interval_id', 'Chef.id'],
+      group: ['sales_date_interval_id', 'chef.id'],
       order,
     });
     const startIndex = (page - 1) * limit;
