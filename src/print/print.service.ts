@@ -24,7 +24,7 @@ export class PrintService {
         'first_name',
         'last_name',
         'phone_number',
-        [col('KorisnickiNalog.SifUloga.naziv'), 'user_role'],
+        [col('korisnickiNalog.sifUloga.naziv'), 'user_role'],
       ],
       include: [
         {
@@ -61,11 +61,11 @@ export class PrintService {
 
     const orderDetails = await Orders.findByPk(o_id, {
       attributes: [
-        [col('Chef.company_name'), 'company_name'],
-        [fn('CONCAT', col('Chef.company_address'), ', ', col('Chef.company_city'), ', ', col('Chef.company_state'), ' ', col('Chef.company_zip_code')), 'address'],
-        [col('Chef.company_phone'), 'company_phone'],
-        [col('Location.location_name'), 'location_name'],
-        [col('Location.location_address'), 'location_address'],
+        [col('chef.company_name'), 'company_name'],
+        [fn('CONCAT', col('chef.company_address'), ', ', col('chef.company_city'), ', ', col('chef.company_state'), ' ', col('chef.company_zip_code')), 'address'],
+        [col('chef.company_phone'), 'company_phone'],
+        [col('location.location_name'), 'location_name'],
+        [col('location.location_address'), 'location_address'],
         [fn('DATE_FORMAT', fn('NOW'), '%b %D %Y'), 'invoice_date'],
         'invoice_number',
         [fn('DATE_FORMAT', col('datum'), '%m/%d/%y'), 'order_date'],
@@ -89,7 +89,7 @@ export class PrintService {
             [literal('ROUND(prodajna_kolicina * price, 2)'), 'extended_price'],
           ],
           order: [
-            ['Product.SifKategorija.id', 'ASC'], // Assuming Category is included properly
+            ['product.sifKategorija.id', 'ASC'], // Assuming Category is included properly
             ['id', 'ASC']
           ],
           include: [
@@ -145,13 +145,13 @@ export class PrintService {
 
     const salesDetail = await Sales.findByPk(s_id, {
       attributes: [
-        [fn('CONCAT', col('Chef.first_name'), ' ', col('Chef.last_name')), 'chef_name'],
-        [col('Chef.company_name'), 'company_name'],
-        [col('Location.location_name'), 'location_name'],
-        [col('Location.location_address'), 'location_address'],
+        [fn('CONCAT', col('chef.first_name'), ' ', col('chef.last_name')), 'chef_name'],
+        [col('chef.company_name'), 'company_name'],
+        [col('location.location_name'), 'location_name'],
+        [col('location.location_address'), 'location_address'],
         [fn('DATE_FORMAT', col('approved_date'), '%m/%d/%y'), 'approved_date'],
-        [fn('DATE_FORMAT', col('SalesDateInterval.start_date'), '%m/%d/%y'), 'start_date'],
-        [fn('DATE_FORMAT', col('SalesDateInterval.end_date'), '%m/%d/%y'), 'end_date'],
+        [fn('DATE_FORMAT', col('salesDateInterval.start_date'), '%m/%d/%y'), 'start_date'],
+        [fn('DATE_FORMAT', col('salesDateInterval.end_date'), '%m/%d/%y'), 'end_date'],
         [literal('COALESCE(orders_id,0)'), 'orders_id'],
       ],
       include: [
@@ -235,13 +235,13 @@ export class PrintService {
 
     const locationDetail = await Sales.findAll({
       attributes: [
-        [fn('CONCAT', col('Chef.first_name'), ' ', col('Chef.last_name')), 'chef_name'],
-        [col('Chef.company_name'), 'company_name'],
-        [col('Location.location_name'), 'location_name'],
-        [col('Location.location_address'), 'location_address'],
+        [fn('CONCAT', col('chef.first_name'), ' ', col('chef.last_name')), 'chef_name'],
+        [col('chef.company_name'), 'company_name'],
+        [col('location.location_name'), 'location_name'],
+        [col('location.location_address'), 'location_address'],
         [fn('DATE_FORMAT', col('approved_date'), '%m/%d/%y'), 'approved_date'],
-        [fn('DATE_FORMAT', col('SalesDateInterval.start_date'), '%m/%d/%y'), 'start_date'],
-        [fn('DATE_FORMAT', col('SalesDateInterval.end_date'), '%m/%d/%y'), 'end_date'],
+        [fn('DATE_FORMAT', col('salesDateInterval.start_date'), '%m/%d/%y'), 'start_date'],
+        [fn('DATE_FORMAT', col('salesDateInterval.end_date'), '%m/%d/%y'), 'end_date'],
         [literal(`(SELECT COALESCE(GROUP_CONCAT(NULLIF(orders_id, '')), 0) FROM sales WHERE id IN (${s_ids.join(',')}))`), 'orders_id']
       ],
       include: [
@@ -340,7 +340,6 @@ export class PrintService {
     param.split(",").map(Number);
     let orderIds: any = locationDetail.length ? locationDetail[0].orders_id : null;
     orderIds = orderIds.split(",").map(Number)
-    console.log("orderId=>", orderIds)
     const orderDetails = await Orders.findAll({
       attributes: [
         ['invoice_number', 'description'],
@@ -389,10 +388,10 @@ export class PrintService {
     const zaglavlje = await Sales.findByPk(s_id, {
       attributes: [
         [fn('DATE_FORMAT', fn('NOW'), '%b %D %Y'), 'invoice_date'],
-        [col('Location.location_name'), 'location_name'],
-        [fn('DATE_FORMAT', col('SalesDateInterval.start_date'), '%m/%d/%y'), 'start_date'],
-        [fn('DATE_FORMAT', col('SalesDateInterval.end_date'), '%m/%d/%y'), 'end_date'],
-        [literal(`CONCAT('HS_',Location.location_name,DATE_FORMAT(SalesDateInterval.end_date,'%m%d%y'))`), 'invoice_number']
+        [col('location.location_name'), 'location_name'],
+        [fn('DATE_FORMAT', col('salesDateInterval.start_date'), '%m/%d/%y'), 'start_date'],
+        [fn('DATE_FORMAT', col('salesDateInterval.end_date'), '%m/%d/%y'), 'end_date'],
+        [literal(`CONCAT('HS_',location.location_name,DATE_FORMAT(salesDateInterval.end_date,'%m%d%y'))`), 'invoice_number']
       ],
       include: [
         {
@@ -455,8 +454,8 @@ export class PrintService {
     const zaglavlje = await Sales.findOne({
       attributes: [
         [fn('DATE_FORMAT', fn('NOW'), '%b %D %Y'), 'statement_date'],
-        [fn('DATE_FORMAT', col('SalesDateInterval.start_date'), '%m/%d/%y'), 'start_date'],
-        [fn('DATE_FORMAT', col('SalesDateInterval.end_date'), '%m/%d/%y'), 'end_date'],
+        [fn('DATE_FORMAT', col('salesDateInterval.start_date'), '%m/%d/%y'), 'start_date'],
+        [fn('DATE_FORMAT', col('salesDateInterval.end_date'), '%m/%d/%y'), 'end_date'],
       ],
       include: [
         {

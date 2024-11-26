@@ -18,7 +18,7 @@ export class ReportService {
   async getInvoiceSales(startDate: any, endDate: any) {
     const salesDetails = await Sales.findAll({
       attributes: [
-        [col('Location.location_name'), 'location_name'],
+        [col('location.location_name'), 'location_name'],
       ],
       include: [
         {
@@ -57,7 +57,7 @@ export class ReportService {
       attributes: [
         'id',
         ['location_id', 'location_id'],
-        [col('Location.location_name'), 'location_name'],
+        [col('location.location_name'), 'location_name'],
         [literal("ukupna_cena + order_price"), 'sales'],
       ],
       include: [
