@@ -514,8 +514,8 @@ export class ChefsService {
         attributes: [
           ['id', 'l_id'],
           'location_name',
-          [literal(`COALESCE((SELECT id FROM Sales WHERE location_id = Location.id AND sales_date_interval_id = ${intervalId} AND status = 0), 0)`), 's_id'],
-          [literal(`COALESCE((SELECT flag_approved FROM Sales WHERE location_id = Location.id AND sales_date_interval_id = ${intervalId} AND status = 0), 0)`), 'flag_approved'],
+          [literal(`COALESCE((SELECT id FROM sales WHERE location_id = Location.id AND sales_date_interval_id = ${intervalId} AND status = 0), 0)`), 's_id'],
+          [literal(`COALESCE((SELECT flag_approved FROM sales WHERE location_id = Location.id AND sales_date_interval_id = ${intervalId} AND status = 0), 0)`), 'flag_approved'],
           // [literal(`(SELECT GROUP_CONCAT(id) FROM sales_item WHERE sales_id IN (SELECT id FROM Sales WHERE location_id = Location.id AND sales_date_interval_id = ${intervalId} AND status = 0) AND tip = 2)`), 'sales_other'],
         ],
         order: [['location_name', 'ASC']],
