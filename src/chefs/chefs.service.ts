@@ -369,12 +369,12 @@ export class ChefsService {
       attributes: [
         'id',
         'price',
-        [col('Product.item_number'), 'item_number'],
-        [col('Product.item_name'), 'item_name'],
-        [col('Product.item_brand'), 'item_brand'],
-        [col('ProductItem.package'), 'package'],
-        [col('Product.SifKategorija.id'), 'kategorija_id'],
-        [col('Product.SifKategorija.naziv'), 'kategorija_naziv'],
+        [col('product.item_number'), 'item_number'],
+        [col('product.item_name'), 'item_name'],
+        [col('product.item_brand'), 'item_brand'],
+        [col('productItem.package'), 'package'],
+        [col('product.sifKategorija.id'), 'kategorija_id'],
+        [col('product.sifKategorija.naziv'), 'kategorija_naziv'],
         [
           literal(`CASE 
             WHEN OrderItem.status = 0 THEN kolicina 
@@ -418,14 +418,14 @@ export class ChefsService {
         },
       ],
       where: {
-        '$Orders.id$': id,
+        '$orders.id$': id,
         [Op.and]: [
           literal(`CASE WHEN OrderItem.status = 3 THEN new = 0 ELSE 1 = 1 END`),
         ],
       },
       order: [
-        [col('Product.SifKategorija.id'), 'ASC'],
-        [col('Product.item_name'), 'ASC'],
+        [col('product.sifKategorija.id'), 'ASC'],
+        [col('product.item_name'), 'ASC'],
       ],
     });
     return orderItems;
