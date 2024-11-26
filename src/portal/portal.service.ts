@@ -165,8 +165,8 @@ export class PortalService {
         order.push([orderBy, sortedBy.toUpperCase()]);
       }
     }
-    order.push([literal('salesDateInterval.start_date'), 'DESC'],
-      [literal('Location.location_name'), 'ASC'],
+    order.push(
+      [literal('salesDateInterval.start_date'), 'DESC'],
       [literal('Chef.first_name'), 'ASC'],)
     const statement = await Sales.findAll({
       attributes: [
