@@ -200,7 +200,7 @@ export class PortalService {
         status: 0,
         ...searchOptions.where
       },
-      group: ['sales_date_interval_id', 'Chef.id'],
+      group: ['sales_date_interval_id', 'chef_id'],
       order,
     });
     const startIndex = (page - 1) * limit;
