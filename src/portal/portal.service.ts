@@ -165,12 +165,12 @@ export class PortalService {
         order.push([orderBy, sortedBy.toUpperCase()]);
       }
     }
-    order.push([literal('SalesDateInterval.start_date'), 'DESC'],
-      [literal('Location.location_name'), 'ASC'],
-      [literal('Chef.first_name'), 'ASC'],)
+    order.push([literal('salesDateInterval.start_date'), 'DESC'],
+      [literal('location.location_name'), 'ASC'],
+      [literal('chef.first_name'), 'ASC'],)
     const statement = await Sales.findAll({
       attributes: [
-        [literal('GROUP_CONCAT(Sales.id)'), 'sales_id'],
+        [literal('GROUP_CONCAT(sales.id)'), 'sales_id'],
         [literal('GROUP_CONCAT(location.location_name ORDER BY location_name)'), 'location_name'],
         [literal("CONCAT(chef.first_name, ' ', chef.last_name)"), 'chef_name'],
         [literal("DATE_FORMAT(salesDateInterval.start_date, '%m/%d/%Y')"), 'start_date'],
