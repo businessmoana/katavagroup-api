@@ -166,8 +166,8 @@ export class PortalService {
       }
     }
     order.push([literal('salesDateInterval.start_date'), 'DESC'],
-      [literal('location.location_name'), 'ASC'],
-      [literal('chef.first_name'), 'ASC'],)
+      [literal('Location.location_name'), 'ASC'],
+      [literal('Chef.first_name'), 'ASC'],)
     const statement = await Sales.findAll({
       attributes: [
         [literal('GROUP_CONCAT(Sales.id)'), 'sales_id'],
