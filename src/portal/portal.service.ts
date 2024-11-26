@@ -231,7 +231,7 @@ export class PortalService {
         [col("Product.item_number"), "item_number"],
         [col("Product.item_brand"), "item_brand"],
         [col("Product.item_image"), "item_image"],
-        [col('SifKategorija.naziv'), 'naziv_kategorije'],
+        [col('naziv'), 'naziv_kategorije'],
       ],
       include: [
         {

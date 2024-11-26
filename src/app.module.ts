@@ -21,7 +21,6 @@ import { PaymentModule } from './payment/payment.module';
 import { ProductsModule } from './products/products.module';
 import { QuestionModule } from './questions/questions.module';
 import { RefundsModule } from './refunds/refunds.module';
-import { ReportsModule } from './reports/reports.module';
 import { ReviewModule } from './reviews/reviews.module';
 import { SettingsModule } from './settings/settings.module';
 import { ShippingsModule } from './shippings/shippings.module';
@@ -56,6 +55,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { LocationsModule } from './locations/locations.module';
 import { PortalModule } from './portal/portal.module';
+import { ReportModule } from './report/report.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot(
@@ -95,7 +95,6 @@ import { PortalModule } from './portal/portal.module';
     ReviewModule,
     QuestionModule,
     WishlistsModule,
-    ReportsModule,
     FeedbackModule,
     PaymentMethodModule,
     PaymentIntentModule,
@@ -119,7 +118,8 @@ import { PortalModule } from './portal/portal.module';
     DateIntervalModule,
     PrintModule,
     LocationsModule,
-    PortalModule
+    PortalModule,
+    ReportModule
   ],
   controllers: [],
   providers: [],

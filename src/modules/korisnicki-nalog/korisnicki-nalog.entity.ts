@@ -36,7 +36,4 @@ export class KorisnickiNalog extends Model<KorisnickiNalog> {
 
   @HasMany(() => Chef, { foreignKey: 'korisnicki_nalog_id' })
   chefs!: Chef[];
-
-  @HasMany(() => Sales, { foreignKey: 'korisnicki_nalog_id' })
-  sales!: Sales[];
 }
