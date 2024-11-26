@@ -67,7 +67,7 @@ export class Product extends Model<Product> {
   @Column({ type: DataType.INTEGER.UNSIGNED })
   sif_kategorija_id!: number;
 
-  @BelongsTo(() => SifKategorija)
+  @BelongsTo(() => SifKategorija, { foreignKey: 'sif_kategorija_id' })
   sifKategorija!: SifKategorija;
 
   @Column(DataType.INTEGER)
