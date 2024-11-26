@@ -250,7 +250,8 @@ export class PortalService {
           attributes: [
             [col('naziv'), 'naziv'] // Include 'naziv' in attributes
           ],
-          order:['id']
+          order:['id'],
+          required: true 
         },
       ],
       where: {
