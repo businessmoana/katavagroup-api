@@ -35,7 +35,9 @@ export class LocationsService {
         status: status, // Filter by status
         ...searchOptions.where,
       },
-      order,
+      order:[
+        'location_name'
+      ]
     });
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -59,11 +61,16 @@ export class LocationsService {
   }
 
   async getAllLocations() {
-    const locations = await Location.findAll({
-      where: {
-        status: 0,
+    const locations = await Location.findAll(
+      {
+        where: {
+          status: 0,
+        },
+        order:[
+          'location_name'
+        ]
       }
-    });
+    );
     return locations;
   }
 
@@ -91,6 +98,7 @@ export class LocationsService {
           license_permit_due: data.license_permit_due,
           location_address: data.location_address,
           note: data.note,
+          sif_price_group_id:data.sif_price_group_id
         },
         {
           where: {

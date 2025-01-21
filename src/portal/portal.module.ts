@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { PortalService } from './portal.service';
 import { PortalController } from './portal.controller';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { LocationsService } from 'src/locations/locations.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
   controllers: [
     PortalController
   ],
-  providers: [PortalService],
+  providers: [PortalService,LocationsService],
 })
 export class PortalModule { }

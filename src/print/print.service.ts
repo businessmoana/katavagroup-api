@@ -222,7 +222,6 @@ export class PrintService {
 
   async getPrintGroupStatement(param: any): Promise<any> {
     const s_ids = param.split(",").map(Number);
-    console.log(s_ids)
 
     const sushi = await Chef.findByPk(3, {
       attributes: [
@@ -543,7 +542,6 @@ export class PrintService {
   }
 
   async getPrintPackList(query: any): Promise<any> {
-    console.log(query)
     const tip = query.tip;
     const orderId = query.orderId;
 

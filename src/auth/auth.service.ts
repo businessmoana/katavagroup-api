@@ -48,37 +48,43 @@ export class AuthService {
     })
     if (!chef || chef.status != 0)
       return { token: "" };
-    if (user.sifUloga.naziv != 'manager')
-      return { token: "" };
+    // if (user.sifUloga.naziv != 'manager')
+    //   return { token: "" };
     const role = 'super_admin';
     const permissions = ['super_admin'];
-    const chefLocation = await ChefLocation.findOne({
-      include: [
-        {
-          model: Location,
-          include: [
-            {
-              model: SifPriceGroup
-            }
-          ]
+    let chefLocation;
+    if (user.sifUloga.naziv != 'manager') {
+      chefLocation = null;
+    } else {
+      chefLocation = await ChefLocation.findOne({
+        include: [
+          {
+            model: Location,
+            include: [
+              {
+                model: SifPriceGroup
+              }
+            ]
+          }
+        ],
+        where: {
+          chef_id: chef.id
         }
-      ],
-      where: {
-        chef_id: chef.id
-      }
-    })
+      })
+    }
     const token = this.jwtService.sign({
       user: {
         userName: user.korisnicko_ime,
         chefId: chef.id,
         chefName: `${chef.first_name} ${chef.last_name}`,
         role: user.sif_uloga_id,
-        locationId: chefLocation.location.id,
-        sifra: chefLocation.location.sifPriceGroup.sifra
+        locationId: chefLocation != null ? chefLocation?.location.id:null,
+        sifra: chefLocation != null ? chefLocation.location.sifPriceGroup.sifra :null
       },
       role,
       permissions
     });
+    
     await KorisnickiNalog.update({
       broj_logovanja: literal("broj_logovanja+1"),
       datum_poslednjeg_logovanja: new Date(),
@@ -114,7 +120,6 @@ export class AuthService {
     })
     if (!chef || chef.status != 0)
       return { token: "" };
-    console.log(user.sifUloga.naziv)
     if (user.sifUloga.naziv != 'admin')
       return { token: "" };
 

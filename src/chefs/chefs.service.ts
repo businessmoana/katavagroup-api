@@ -18,6 +18,7 @@ import { SalesDateInterval } from 'src/modules/sales-date-interval/sales-date-in
 import { Sales } from 'src/modules/sales/sales.entity';
 import { SalesItem } from 'src/modules/sales-item/sales-item.entity';
 import * as bcrypt from 'bcrypt';
+import sequelize from 'sequelize';
 
 @Injectable()
 export class ChefsService {
@@ -197,10 +198,7 @@ export class ChefsService {
       korisnickiNalog.korisnicko_ime = updateChef.korisnicko_ime;
       korisnickiNalog.sif_uloga_id = updateChef.role.value;
       if (updateChef.password) {
-        console.log(updateChef.password)
         const hashedPassword = await bcrypt.hash(updateChef.password, 10)
-        console.log("updateChef.password=>", updateChef.password)
-        console.log("hashedPassword=>", hashedPassword)
         korisnickiNalog.lozinka = hashedPassword; // Ensure to hash the password in a real scenario
       }
 
@@ -436,8 +434,16 @@ export class ChefsService {
     const searchOptions = search ? {
       where: {
         [Op.or]: [
-          { first_name: { [Op.like]: `%${search}%` } },
-          { last_name: { [Op.like]: `%${search}%` } },
+          { invoice_number: { [Op.like]: `%${search}%` } },
+          { 
+            [Op.and]: sequelize.where(
+              sequelize.fn('DATE_FORMAT', sequelize.col('ship_date'), '%m/%d-%Y'), // Adjust format as needed
+              { [Op.like]: `%${search}%` } // Match the substring
+            )
+          },
+          { '$chef.first_name$': { [Op.like]: `%${search}%` } },
+          { '$chef.last_name$': { [Op.like]: `%${search}%` } },
+          { '$location.location_name$': { [Op.like]: `%${search}%` } },
         ],
       },
     } : {};
@@ -469,7 +475,7 @@ export class ChefsService {
           attributes: [
             'first_name',
             'last_name'
-          ]
+          ],
         }
       ],
       where: {

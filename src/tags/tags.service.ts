@@ -35,7 +35,6 @@ export class TagsService {
       const searchText: any = [];
       for (const searchParam of parseSearchParams) {
         const [key, value] = searchParam.split(':');
-        console.log(value, 'value');
         // TODO: Temp Solution
         if (key !== 'slug') {
           searchText.push({

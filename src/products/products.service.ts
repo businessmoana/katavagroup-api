@@ -293,7 +293,6 @@ export class ProductsService {
 
   async duplicateProduct(productId: any) {
     const oldProduct = await Product.findByPk(productId);
-    console.log(oldProduct)
     const newProduct = await Product.create({
       item_number: oldProduct.item_number,
       item_name: oldProduct.item_name,
@@ -339,8 +338,6 @@ export class ProductsService {
   }
 
   async getOrders(data: any) {
-    console.log(data)
-    console.log(new Date(data.startDate))
     const orders = await Orders.findAll({
       attributes: [
         [col('Orders.id'), 'order_id'],
@@ -531,7 +528,6 @@ export class ProductsService {
   }
 
   async savePalletTax(data: any) {
-    console.log(data)
     await Orders.update(
       {
         pallet_cost: data.pallet_cost,

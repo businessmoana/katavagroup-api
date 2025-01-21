@@ -14,6 +14,7 @@ import { ProductItem } from 'src/modules/product-item/product-item.entity';
 import { SifKategorija } from 'src/modules/sif-ktegorija/sifK-ktegorija.entity';
 import { OrderItem } from 'src/modules/order-item/order-item.entity';
 import nodemailer from 'nodemailer';
+import { ChefLocation } from 'src/modules/chef-location/chef-location.entity';
 @Injectable()
 export class PortalService {
 
@@ -215,11 +216,11 @@ export class PortalService {
     };
   }
 
-  async getProducts(user, { search, orderBy, sortedBy, limit, page }: any): Promise<any> {
-    console.log(user)
-    const searchOptions = search ? {
+  async getProducts(user, { search, limit, page, categories, sifraId }: any): Promise<any> {
+    const searchOptions = categories || search ? {
       where: {
-        [Op.or]: [
+        [Op.and]: [
+          categories ? { sif_kategorija_id: categories } : {},
           { item_name: { [Op.like]: `%${search}%` } }
         ],
       },
@@ -239,7 +240,7 @@ export class PortalService {
           attributes: [
             [col("id"), "product_item_id"],
             [col("package"), "package"],
-            [literal(`COALESCE(price_${user.sifra},0)`),'price']
+            [literal(`COALESCE(price_${user.sifra != null ? user.sifra : sifraId ? sifraId : 1},0)`), 'price']
           ],
           where: {
             status: 0
@@ -250,16 +251,16 @@ export class PortalService {
           attributes: [
             [col('naziv'), 'naziv'] // Include 'naziv' in attributes
           ],
-          order:['id'],
-          required: true 
+          order: ['id'],
+          required: true
         },
       ],
       where: {
-        // status: 0,
-        public:0,
+        public: 0,
         ...searchOptions.where
       },
       order: [
+        ['sif_kategorija_id', 'ASC'],
         'item_name'
       ]
     })
@@ -277,13 +278,34 @@ export class PortalService {
 
   }
 
-  async createOrder(user:any,data:any){
+  async createOrder(user: any, data: any) {
+    let chefId = user.chefId;
+    let locationId = user.locationId;
+    if (user.role == 1) {
+      locationId = data.locationId;
+      const chef = await Chef.findOne({
+        attributes: [
+          'id',
+        ],
+        include: [{
+          model: ChefLocation,
+          required: true,
+          where: {
+            location_id: locationId
+          }
+        }],
+        where: {
+          status: 0
+        }
+      })
+      chefId = chef.id;
+    }
     const newOrder = await Orders.create({
       ukupna_cena: data.totalPrice,
       br_proizvoda: data.items.length,
       datum: new Date(),
-      chef_id: user.chefId,
-      location_id: user.locationId,
+      chef_id: chefId,
+      location_id: locationId,
       status: 0,
       flag_approved: 1,
       pallet_cost: 0,
@@ -318,7 +340,7 @@ export class PortalService {
         pass: 'mBusiness118*', // Your email password
       },
     });
-  
+
     // Email options
     const mailOptions = {
       from: '"Order Notification" <businessmoana118@gmail.com>', // Sender address
@@ -326,8 +348,13 @@ export class PortalService {
       subject: 'New Order Created', // Subject line
       text: `A new order has been created.`, // Plain text body
     };
-  
+
     // Send email
     await transporter.sendMail(mailOptions);
+  }
+
+  async getCategories() {
+    let data = await SifKategorija.findAll();
+    return data;
   }
 }
