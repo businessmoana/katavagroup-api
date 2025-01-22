@@ -40,7 +40,7 @@ export class ProductsService {
         'item_name',
         'item_brand',
         'status',
-        [col('SifKategorija.naziv'), 'naziv_kategorije'],
+        [col('sifKategorija.naziv'), 'item_category'],
         'item_image',
       ],
       include: [
