@@ -87,7 +87,7 @@ export class ProductsService {
         [literal("COALESCE(pallet_ct,'')"), 'pallet_ct'],
         [literal("COALESCE(min_qty_on_hand,'')"), 'min_qty_on_hand'],
         [literal("COALESCE(reordering_amount,'')"), 'reordering_amount'],
-        [col('SifKategorija.naziv'), 'naziv_kategorije'],
+        [col('sifKategorija.naziv'), 'naziv_kategorije'],
         'note',
         'sif_kategorija_id',
         'item_image',
