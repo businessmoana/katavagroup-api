@@ -592,8 +592,8 @@ export class ProductsService {
         [col("Product.item_name"), "item_name"],
         [col("Product.item_number"), "item_number"],
         [col("Product.item_brand"), "item_brand"],
-        [col("productItems.id"), "product_item_id"],
-        [col("productItems.package"), "package"],
+        [col("productItem.id"), "product_item_id"],
+        [col("productItem.package"), "package"],
       ],
       include: [
         {
