@@ -341,7 +341,7 @@ export class ProductsService {
     const orders = await Orders.findAll({
       attributes: [
         [col('Orders.id'), 'order_id'],
-        [col("Location.location_name"), 'location_name'],
+        [col("location.location_name"), 'location_name'],
         [literal("COALESCE(DATE_FORMAT(locationDate.order_date,'%m/%d/%Y'), '')"), 'date_for_list'],
         [literal("COALESCE(DATE_FORMAT(Orders.datum,'%m/%d/%Y'), '')"), 'datum_porudzbine'],
         // 'delivery_option',
